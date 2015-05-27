@@ -17,21 +17,23 @@ if ($res->numRows() == 0) {
 
 ?>
 <#2>
+<#3>
+<#4>
 <?php
 
-if (!$ilDB->tableExists("il_qpl_qst_smc")) {
+if (!$ilDB->tableExists("qpl_qst_smc")) {
     $fields = array(
         "question_id" => array(
                     "type"   => "integer",
-                    "length" => "4"
+                    "length" => 4
         ),
         "points" => array(
                     "type"   => "integer",
-                    "length" => "4"
+                    "length" => 4
         )
     );
 
-    $ilDB->createTable("qpl_smc", $fields);
+    $ilDB->createTable("qpl_qst_smc", $fields);
 }
 
 ?>

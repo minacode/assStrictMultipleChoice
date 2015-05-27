@@ -1,5 +1,7 @@
 <?php
 
+require_once("Modules/TestQuestionPool/classes/feedback/class.ilAssMultipleChoiceFeedback.php");
+
 /* Copyright (c) 1998-2013 ILIAS open source, Extended GPL, see docs/LICENSE */
 
 /**
@@ -8,9 +10,7 @@
  * @ingroup     ModulesTestQuestionPool
  */
 
-require_once('Modules/TestQuestionPool/classes/class.ilAssMultipleChoiceFeedbackk.php');
-
-class assStrictMultipleChoiceFeedback extends assMultipleChoiceFeedback {
+class ilAssStrictMultipleChoiceFeedback extends ilAssMultipleChoiceFeedback {
 }
 
 ?>

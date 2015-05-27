@@ -2,7 +2,7 @@
  
 $id = "smc";
 
-$version = "0.0.2";
+$version = "0.0.6";
  
 $ilias_min_version = "4.0.0";
 $ilias_max_version = "4.9.9";

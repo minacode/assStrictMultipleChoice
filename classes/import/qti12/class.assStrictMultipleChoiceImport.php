@@ -1,6 +1,6 @@
 <?php
 
-require_once("Modules/TestQuestionPool/classes/export/qti12/class.assMultipleChoiceImport.php");
+require_once("Modules/TestQuestionPool/classes/import/qti12/class.assMultipleChoiceImport.php");
 
 /**
 * StrictMultipleChoice Import

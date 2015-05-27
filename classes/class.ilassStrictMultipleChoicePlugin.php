@@ -11,16 +11,16 @@
 require_once("./Modules/TestQuestionPool/classes/class.ilQuestionsPlugin.php");
 
 class ilassStrictMultipleChoicePlugin extends ilQuestionsPlugin {
-                final function getPluginName() {
-                        return "assStrictMultipleChoice";
-                }
-                
-                final function getQuestionType() {
-                        return "assStrictMultipleChoice";
-                }
-                
-                final function getQuestionTypeTranslation() {
-                        return $this->txt($this->getQuestionType());
-                }
+        final function getPluginName() {
+                return "assStrictMultipleChoice";
+        }
+        
+        final function getQuestionType() {
+                return "assStrictMultipleChoice";
+        }
+        
+        final function getQuestionTypeTranslation() {
+                return $this->txt($this->getQuestionType());
+        }
 }
 ?>

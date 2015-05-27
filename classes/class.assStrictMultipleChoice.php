@@ -37,22 +37,22 @@ class assStrictMultipleChoice extends assMultipleChoice {
                 $points = 0
         ) {
                 parent::_construct($title, $comment, $author, $owner, $question, $output_type);
-                $this->points = 0;
+                $this->pointsForCorrectAnswers = 0;
         }
         
         public function getQuestionType() {
                 return "assStrictMultipleChoice";
         }
 
-        public function getPoints() {
-                return $this->points;
+        public function getPointsForCorrectAnswers() {
+                return $this->pointsForCorrectAnswers;
         }
 
-        public function setPoints($points) {
-                $this->points = $points;
+        public function setPointsForCorrectAnswers($points) {
+                $this->pointsForCorrectAnswers = $points;
         }
 
-        public function savePointsToDb($original_id) {
+        public function savePointsForCorrectAnswersToDb($original_id) {
                 global $ilDB;
                 $result = $ilDB->queryF(
                         "SELECT * FROM qpl_smc WHERE question_id = %s",
@@ -81,10 +81,10 @@ class assStrictMultipleChoice extends assMultipleChoice {
                 }
         }
 
-        public function loadPointsFromDb($question_id) {
+        public function loadPointsForCorrectAnswersFromDb($question_id) {
                 global $ilDB;
-                $result = $ilDB->query(
-                        "SELECT points FROM qpl_smc WHERE question_id = %s",
+                $result = $ilDB->queryF(
+                        "SELECT points FROM qpl_qst_smc WHERE question_id = %s;",
                         array("integer"),
                         array($this->getId())
                 );
@@ -95,13 +95,13 @@ class assStrictMultipleChoice extends assMultipleChoice {
         }
 
         public function saveToDb($original_id = "") {
-                $this->savePointsToDb($original_id);
+                $this->savePointsForCorrectAnswersToDb($original_id);
                 parent::saveToDb($original_id);
         }
                 
         public function loadFromDb($question_id) {
                 parent::loadFromDb($question_id);
-                $this->loadPointsFromDb($question_id);
+                $this->loadPointsForCorrectAnswersFromDb($question_id);
         }
 
         public function delete($question_id) {
@@ -113,8 +113,21 @@ class assStrictMultipleChoice extends assMultipleChoice {
 
         public function toJSON() {
                 $result = json_decode( parent::toJSON() );
-                $result['points'] = $this->getPoints();
+                $result['points'] = $this->getPointsForCorrectAnswers();
                 return json_encode($result);
+        }
+        
+        public function getMaximumPoints() {
+            return $this->getPointsForCorrectAnswers();
+        }
+        
+        public function calculateReachedPoints($active_id, $pass = NULL, $returndetails = FALSE) {
+                $reached_points = parent::calculateReachedPoints($active_id, $pass, $returndetails);
+                $maximum_points = parent::getMaximumPoints();
+                if ($reached_points == $maximum_points) {
+                    return $this->getPointsForCorrectAnswers();
+                }
+                return 0;
         }
 }
 
