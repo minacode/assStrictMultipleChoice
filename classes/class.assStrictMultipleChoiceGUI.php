@@ -73,7 +73,7 @@ class assStrictMultipleChoiceGUI extends assMultipleChoiceGUI {
                 $file_org_name  = $_FILES['choice']['name']['image'][$index];
                 $file_temp_name = $_FILES['choice']['tmp_name']['image'][$index];
                 if (strlen( $file_temp_name )) {
-                    // check suffix                                         
+                    // check suffix
                     $suffix = strtolower( array_pop( explode( ".", $file_org_name ) ) );
                     if (in_array( $suffix, array( "jpg", "jpeg", "png", "gif" ) )) {
                         // upload image
@@ -87,12 +87,12 @@ class assStrictMultipleChoiceGUI extends assMultipleChoiceGUI {
                     $points_checked = 1;
                     $points_unchecked = 0;
                 } else {
-                    $points_checkd = 0;
+                    $points_checked = 0;
                     $points_unchecked = 1;
                 }    
                 $this->object->addAnswer( 
                     $answertext,
-                    $points,
+                    $points_checked,
                     $points_unchecked,
                     $index,
                     $picturefile
@@ -101,16 +101,16 @@ class assStrictMultipleChoiceGUI extends assMultipleChoiceGUI {
         } else {
             foreach ($_POST['choice']['answer'] as $index => $answer) {
                 $answertext = $answer;
-                if ( $_POST['choice']['correct_answer'][$index]) {
+                if ( $_POST['choice']['correct_answer'][$index] == "on") {
                     $points_checked = 1;
                     $points_unchecked = 0;
                 } else {
-                    $points_checkd = 0;
+                    $points_checked = 0;
                     $points_unchecked = 1;
                 }
                 $this->object->addAnswer(
                     $answertext,
-                    $points,
+                    $points_checked,
                     $points_unchecked,
                     $index
                 );

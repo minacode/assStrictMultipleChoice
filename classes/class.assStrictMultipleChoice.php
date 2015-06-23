@@ -5,7 +5,7 @@
 /**
  * @extends assMultipleChoice
  * 
- * @ingroup     ModulesTestQuestionPool
+ * @ingroup ModulesTestQuestionPool
  */
 
 require_once('Modules/TestQuestionPool/classes/class.assMultipleChoice.php');
@@ -13,8 +13,9 @@ require_once('export/qti12/class.assStrictMultipleChoiceExport.php');
 require_once('import/qti12/class.assStrictMultipleChoiceImport.php');
 
 class assStrictMultipleChoice extends assMultipleChoice {
-        protected $points;
-
+        
+        protected $pointsForCorrectAnswers;
+        
         /**
         * assStrictMultipleChoice constructor
         *
@@ -72,14 +73,14 @@ class assStrictMultipleChoice extends assMultipleChoice {
                         "qpl_smc",
                         array(
                             "question_id" => array( "integer", $id ),
-                            "points"      => array( "integer", $this->getPoints())
+                            "points"      => array( "integer", $this->getPointsForCorrectAnswers() )
                         )
                     );
                 } else {
                     $affectedRows = $ilDB->update(
                         "qpl_smc", 
                         array(
-                            "points" => array( "integer", $this->getPoints() )
+                            "points" => array( "integer", $this->getPointsForCorrectAnswers() )
                         ),
                         array(
                             "question_id" => array( "integer", $id )
@@ -91,17 +92,18 @@ class assStrictMultipleChoice extends assMultipleChoice {
         public function loadPointsForCorrectAnswersFromDb($question_id) {
                 global $ilDB;
                 $result = $ilDB->queryF(
-                        "SELECT points FROM qpl_qst_smc WHERE question_id = %s;",
+                        "SELECT points FROM qpl_smc WHERE question_id = %s;",
                         array("integer"),
                         array($this->getId())
                 );
                 if ($result->numRows() == 1) {
                         $data = $ilDB->fetchAssoc($result);
-                        $this->setPoints($data["points"]);
+                        $this->setPointsForCorrectAnswers($data["points"]);
                 }
         }
 
         public function saveToDb($original_id = "") {
+                parent::saveToDb($original_id); // to get id
                 $this->savePointsForCorrectAnswersToDb($original_id);
                 parent::saveToDb($original_id);
         }
@@ -110,6 +112,13 @@ class assStrictMultipleChoice extends assMultipleChoice {
                 parent::loadFromDb($question_id);
                 $this->loadPointsForCorrectAnswersFromDb($question_id);
         }
+
+        //protected function onDuplicate($originalParentId, $originalQuestionId, $duplicateParentId, $duplicateQuestionId) {
+        //    parent::onDuplicate($originalParentId, $originalQuestionId, $duplicateParentId, $duplicateQuestionId);
+        //    $original = assQuestion::_instanciateQuestion($originalQuestionId);
+        //    $this->setPointsForCorrectAnswers( $original->getPointsForCorrectAnswers() );
+        //    $this->saveToDb($original_id);
+        //}
 
         public function delete($question_id) {
                 global $ilDB;
@@ -120,7 +129,7 @@ class assStrictMultipleChoice extends assMultipleChoice {
 
         public function toJSON() {
                 $result = json_decode( parent::toJSON() );
-                $result['points'] = $this->getPointsForCorrectAnswers();
+                $result["points"] = $this->getPointsForCorrectAnswers();
                 return json_encode($result);
         }
         
