@@ -44,6 +44,10 @@ class assStrictMultipleChoice extends assMultipleChoice {
                 return "assStrictMultipleChoice";
         }
 
+        public function duplicate($for_test = true, $title = "", $author = "", $owner = "", $testObjId = null) {
+            return parent::duplicate($for_test, $title, $author, $owner, $testObjId);
+        }
+
         public function getPointsForCorrectAnswers() {
                 return $this->pointsForCorrectAnswers;
         }
@@ -54,17 +58,20 @@ class assStrictMultipleChoice extends assMultipleChoice {
 
         public function savePointsForCorrectAnswersToDb($original_id) {
                 global $ilDB;
+                
+                $id = $this->getId();
+                
                 $result = $ilDB->queryF(
                         "SELECT * FROM qpl_smc WHERE question_id = %s",
                         array("integer"),
-                        array( $this->getId() ) 
+                        array( $id ) 
                 );
         
                 if ($result->numRows() <= 0) {
                     $affectedRows = $ilDB->insert(
                         "qpl_smc",
                         array(
-                            "question_id" => array( "integer", $this->getId()      ),
+                            "question_id" => array( "integer", $id ),
                             "points"      => array( "integer", $this->getPoints())
                         )
                     );
@@ -75,7 +82,7 @@ class assStrictMultipleChoice extends assMultipleChoice {
                             "points" => array( "integer", $this->getPoints() )
                         ),
                         array(
-                            "question_id" => array( "integer", $this->getId()                 )
+                            "question_id" => array( "integer", $id )
                         )
                     );
                 }
